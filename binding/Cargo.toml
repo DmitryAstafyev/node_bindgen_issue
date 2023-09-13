@@ -1,0 +1,23 @@
+[package]
+name = "binding"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib"]
+
+[build-dependencies]
+node-bindgen = { version = "5.1", default-features = false, features = ["build"] }
+
+[dependencies]
+log = "0.4"
+log4rs = "1.2"
+node-bindgen = { version = "5.1", features = ["serde-json"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+session = { path = "../rust" }
+tokio = { version = "1.24", features = ["full"] }
+tokio-util = "0.7"
+uuid = { version = "1.3", features = ["serde", "v4"] }

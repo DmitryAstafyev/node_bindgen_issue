@@ -1,0 +1,22 @@
+{
+  "name": "ts",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "node_modules/.bin/tsc -p tsconfig.json",
+    "test_cancel": "node_modules/.bin/electron node_modules/jasmine-ts/lib/index.js ./spec/session.cancel.spec.ts"
+  },
+  "author": "Dmitry Astafyev",
+  "contributors": [],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.6.0",
+    "ts-node": "^10.4.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "tslib": "^2.6.2"
+  }
+}
