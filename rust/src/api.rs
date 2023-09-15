@@ -1,8 +1,9 @@
-use tokio::sync::{mpsc::UnboundedSender, oneshot};
+use tokio::sync::mpsc::UnboundedSender;
+use tokio_util::sync::CancellationToken;
 
 #[derive(Debug)]
 pub enum API {
-    Sleep(oneshot::Sender<()>, u64),
+    Sleep(CancellationToken, u64),
 }
 
 #[derive(Clone, Debug)]
@@ -16,10 +17,11 @@ impl Controller {
     }
 
     pub async fn sleep(&self, delay: u64) -> Result<(), String> {
-        let (tx_results, rx_results) = oneshot::channel();
+        let done = CancellationToken::new();
         self.tx
-            .send(API::Sleep(tx_results, delay))
+            .send(API::Sleep(done.clone(), delay))
             .map_err(|_| String::from("Fail to send call Job::Sleep"))?;
-        rx_results.await.map_err(|e| format!("channel error: {e}"))
+        done.cancelled().await;
+        Ok(())
     }
 }

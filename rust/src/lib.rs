@@ -29,15 +29,13 @@ impl Session {
             println!("Rust: waiting for commands");
             while let Some(api) = rx.recv().await {
                 match api {
-                    API::Sleep(tx_result, delay) => {
+                    API::Sleep(done, delay) => {
                         let task = inner.clone();
                         tokio::spawn(async move {
                             println!("Rust: Job \"Sleep\" has been called");
                             sleep(Duration::from_millis(delay)).await;
-                            if tx_result.send(()).is_err() {
-                                eprintln!("Rust: Fail to send result from sleeping");
-                            }
                             task.cancel();
+                            done.cancel();
                         });
                     }
                 }
