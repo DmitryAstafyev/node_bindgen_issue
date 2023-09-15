@@ -55,20 +55,11 @@ impl Jobs {
     }
 
     #[node_bindgen]
-    async fn abort(&self, id: i64) -> Result<(), String> {
+    async fn sleep(&self, delay: i64) -> Result<(), String> {
         self.api
             .as_ref()
             .ok_or(String::from("Session unavailable"))?
-            .cancel(&u64_from_i64(id)?)
-            .await
-    }
-
-    #[node_bindgen]
-    async fn sleep(&self, id: i64, delay: i64) -> Result<(), String> {
-        self.api
-            .as_ref()
-            .ok_or(String::from("Session unavailable"))?
-            .sleep(u64_from_i64(id)?, u64_from_i64(delay)?)
+            .sleep(u64_from_i64(delay)?)
             .await
     }
 }

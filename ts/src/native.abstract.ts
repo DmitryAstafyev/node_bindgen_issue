@@ -1,18 +1,15 @@
 import { getNativeModule } from "./native";
 
 export abstract class Native {
-  public abstract abort(sequence: number): Promise<void>;
-
   public abstract init(): Promise<void>;
 
   public abstract destroy(): Promise<void>;
 
-  public abstract sleep(sequence: number, delay: number): Promise<void>;
+  public abstract sleep(delay: number): Promise<void>;
 }
 
 export class Jobs {
   protected readonly native: Native;
-  protected sequence: number = 0;
 
   constructor() {
     this.native = new (getNativeModule().Jobs)() as Native;
@@ -64,26 +61,10 @@ export class Jobs {
     });
   }
 
-  public async abort(sequence: number): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.native
-        .abort(sequence)
-        .then(resolve)
-        .catch((err: Error) => {
-          console.error(
-            `TS: Fail to abort operation due error: ${
-              err instanceof Error ? err.message : err
-            }`
-          );
-          reject(err);
-        });
-    });
-  }
-
   public async sleep(delay: number): Promise<void> {
     return new Promise((resolve, reject) => {
       this.native
-        .sleep(this.sequence++, delay)
+        .sleep(delay)
         .then(resolve)
         .catch((err: Error) => {
           console.error(
